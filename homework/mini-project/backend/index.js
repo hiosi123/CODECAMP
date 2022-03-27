@@ -25,7 +25,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJsdoc(options)));
 
 const port = 3001
 
-
+//회원가입 버튼
 app.post('/user', async(req, res) => {
     
     const NumberFromFront = req.body.phone
@@ -61,8 +61,10 @@ app.post('/user', async(req, res) => {
             const website = await createBoardAPI(SiteFromFront)
             req.body.og = website
             
+            //주민번호 형식이 올바른지
             if(!checkDash(PersonalFromFront) || !checkLength(PersonalFromFront)){
                 res.send('주민번호 형식을 확인해주세요')
+                res.status(422)
                 return
             }
             const personalHide = hideNumber(PersonalFromFront)
@@ -114,9 +116,15 @@ app.post('/user', async(req, res) => {
 app.get('/users', async(req, res) => {
 
     const user = await User.find()
-
-
+    //회원 정보가 없을때 array 의 길이는 0입니다.
+    if(user.length === 0){
+        res.send("등록된 회원 정보가 없습니다.")
+        return
+    }
     res.send(user)
+    
+
+    
 })
 
 app.get('/starbucks', async (req,res) => {
@@ -144,7 +152,7 @@ app.post('/tokens/phone', async (req, res) => {
         myToken = getToken()
         
         sendToken(req.body.phone, myToken)
-        res.send(myToken)
+        
        
     }
 
@@ -157,10 +165,11 @@ app.post('/tokens/phone', async (req, res) => {
             isAuth: false
         })
         await phoneToken.save()
-
+        res.send(myToken)
         
     } else {
         await Phone.updateOne({phone:req.body.phone}, {token:myToken})
+        res.send(`updated token: ${myToken}`)
     }
 })
 
@@ -175,12 +184,12 @@ app.patch('/tokens/phone', async (req, res) => {
 
     if(req.body.phone !== phonenum.phone || req.body.token !== phonenum.token) {
         res.status(422)
-        res.send("인증 실패")
+        res.send(false)
         console.log("인증 실패")
         return
     } else {
         await Phone.updateOne({phone:req.body.phone }, {isAuth:true})
-        res.send("인증 성공")
+        res.send(true)
         console.log("인증 성공")
     }
         
