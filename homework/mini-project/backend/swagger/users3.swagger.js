@@ -24,7 +24,7 @@
  *                  application/json:
  *                      schema:
  *                          type: String
- *                          example: 인증 성공, 인증 실패
+ *                          example: true, false
  *                 
  * 
  */                         

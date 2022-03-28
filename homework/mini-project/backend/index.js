@@ -33,11 +33,11 @@ app.post('/user', async(req, res) => {
     const EmailFromFront = req.body.email
     let SiteFromFront = req.body.prefer
 
-    
+
     const phonenum = await Phone.findOne({ phone: NumberFromFront });
     const user = await User.findOne({phone:NumberFromFront})
     
-    //클라이언트가 입력한 번호가 인증 확인 과정에서 들어온 데이터 서버에 있는 번호와 일치하는지
+    //클라이언트가 입력한 번호가 인증 확인 과정에서 들어온 번호랑 일치하는지
     if(phonenum) {
         //클라이언트가 입력한 번호가 이미 유저로 등록 되어 있는지 여부 확인
         if(user){
@@ -113,11 +113,18 @@ app.post('/user', async(req, res) => {
     }
 })
 
+
+
+
+
+
+
 app.get('/users', async(req, res) => {
 
     const user = await User.find()
     //회원 정보가 없을때 array 의 길이는 0입니다.
     if(user.length === 0){
+        res.status(422)
         res.send("등록된 회원 정보가 없습니다.")
         return
     }

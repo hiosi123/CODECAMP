@@ -2,7 +2,7 @@
  * @openapi
  * /tokens/phone:
  *   post:
- *      summary: 휴대폰 인증
+ *      summary: 휴대폰 인증 번호 발송
  *      tags: [Post]
  *      requestBody:
  *              required: true

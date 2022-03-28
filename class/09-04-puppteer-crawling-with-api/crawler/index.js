@@ -11,7 +11,7 @@ async function startCrawling(){
 
     await page.goto("https://finance.naver.com/item/sise.naver?code=005930") //여기 페이지로 이동
     await page.waitForTimeout(1000)
-
+    
     //body의 자식으로 테이블이 있지 않다
     const framePage = await page.frames().find(el => el.url().includes("/item/sise_day.naver?code=005930")) //이.프레임으로 이동
     //iframe 안은 새로운 새아티드, 새로운 html 사이트의 바디의 테이블에서 찾아와야한다
