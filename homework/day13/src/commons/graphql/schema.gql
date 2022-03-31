@@ -1,0 +1,29 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Board {
+  drinks: String!
+  cost: String!
+  kcal: Int!
+  fat: Int!
+  natrium: Int!
+  sugar: Int!
+  caffeine: Int!
+}
+
+type Query {
+  fetchStarbucks: [Board!]!
+}
+
+type Mutation {
+  createStarbucks(drinks: String!, cost: String!, createBoardInput: CreateBoardInput!): String!
+}
+
+input CreateBoardInput {
+  kcal: Int!
+  fat: Int!
+  natrium: Int!
+  sugar: Int!
+  caffeine: Int!
+}

@@ -23,7 +23,7 @@ eee = true;
 
 let fff: number[] = [1, 2, 3, 4, 5, "안녕하세요"];
 let ggg: string[] = ["철수", "영희", "훈이", 123];
-let hhh: (number | string)[] = ["asdasd", 123];
+let hhh: number[] | string[] = [123, "asdasd"];
 
 //객체타입
 interface IProfile {
