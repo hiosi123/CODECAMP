@@ -1,9 +1,12 @@
 export declare class BoardService {
     findAll(): {
-        number: number;
-        writer: string;
-        title: string;
-        contents: string;
+        drinks: string;
+        cost: string;
+        kcal: number;
+        fat: number;
+        natrium: number;
+        sugar: number;
+        caffeine: number;
     }[];
     create(): string;
 }

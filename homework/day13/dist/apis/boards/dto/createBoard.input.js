@@ -14,14 +14,6 @@ const graphql_1 = require("@nestjs/graphql");
 let CreateBoardInput = class CreateBoardInput {
 };
 __decorate([
-    (0, graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], CreateBoardInput.prototype, "drinks", void 0);
-__decorate([
-    (0, graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], CreateBoardInput.prototype, "cost", void 0);
-__decorate([
     (0, graphql_1.Field)(() => graphql_1.Int),
     __metadata("design:type", Number)
 ], CreateBoardInput.prototype, "kcal", void 0);

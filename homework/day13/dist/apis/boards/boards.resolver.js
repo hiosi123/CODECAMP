@@ -21,17 +21,12 @@ let BoardResolver = class BoardResolver {
     constructor(boardService) {
         this.boardService = boardService;
     }
-    fetchBoards() {
+    fetchStarbucks() {
         return this.boardService.findAll();
     }
-    createBoard(drinks, cost, kcal, fat, natrium, sugar, caffeine, createBoardInput) {
+    createStarbucks(drinks, cost, createBoardInput) {
         console.log(drinks);
         console.log(cost);
-        console.log(kcal);
-        console.log(fat);
-        console.log(natrium);
-        console.log(sugar);
-        console.log(caffeine);
         console.log(createBoardInput);
         return this.boardService.create();
     }
@@ -41,21 +36,16 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], BoardResolver.prototype, "fetchBoards", null);
+], BoardResolver.prototype, "fetchStarbucks", null);
 __decorate([
     (0, graphql_1.Mutation)(() => String),
     __param(0, (0, graphql_1.Args)('drinks')),
     __param(1, (0, graphql_1.Args)('cost')),
-    __param(2, (0, graphql_1.Args)('kcal')),
-    __param(3, (0, graphql_1.Args)('fat')),
-    __param(4, (0, graphql_1.Args)('natrium')),
-    __param(5, (0, graphql_1.Args)('sugar')),
-    __param(6, (0, graphql_1.Args)('caffeine')),
-    __param(7, (0, graphql_1.Args)('createBoardInput')),
+    __param(2, (0, graphql_1.Args)('createBoardInput')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, Number, Number, Number, Number, Number, createBoard_input_1.CreateBoardInput]),
+    __metadata("design:paramtypes", [String, String, createBoard_input_1.CreateBoardInput]),
     __metadata("design:returntype", void 0)
-], BoardResolver.prototype, "createBoard", null);
+], BoardResolver.prototype, "createStarbucks", null);
 BoardResolver = __decorate([
     (0, graphql_1.Resolver)(),
     __metadata("design:paramtypes", [boards_service_1.BoardService])

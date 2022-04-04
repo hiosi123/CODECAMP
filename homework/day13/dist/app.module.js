@@ -6,16 +6,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createStarbucks = void 0;
+exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const boards_module_1 = require("./apis/boards/boards.module");
 const apollo_1 = require("@nestjs/apollo");
 const graphql_1 = require("@nestjs/graphql");
 const typeorm_1 = require("@nestjs/typeorm");
 const board_entity_1 = require("./apis/boards/entities/board.entity");
-let createStarbucks = class createStarbucks {
+let AppModule = class AppModule {
 };
-createStarbucks = __decorate([
+AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             boards_module_1.BoardModule,
@@ -36,6 +36,6 @@ createStarbucks = __decorate([
             }),
         ],
     })
-], createStarbucks);
-exports.createStarbucks = createStarbucks;
+], AppModule);
+exports.AppModule = AppModule;
 //# sourceMappingURL=app.module.js.map
