@@ -1,0 +1,67 @@
+show databases;
+
+use myproject02;
+
+show tables;
+
+desc product;
+
+select *
+from product;
+
+select price
+from product;
+
+select name
+from product;
+
+select name, price
+from product;
+
+insert into product(id, name, description, price, isSoldout)
+values(uuid(),'마우스', '정말 좋은 마우스입니다!!! 22', 15000, false);
+
+select * 
+from product_saleslocation;
+
+insert into product_saleslocation(id,address,addressDetail,lat,lng,meetingTime)
+values(uuid(), '구로구', '구로디지털단지역', 0.0, 0.1, '2022-12-31');
+
+update product 
+	set name = '키보드'
+	WHERE price = 15000;
+
+select * FROM product;
+
+insert into product(id, name, description, price, isSoldout)
+values(uuid(), '노트', '최신!!! 22', 20000, false);
+
+select price, isSoldout 
+FROM product p
+where name = '노트';
+
+update product 
+	SET productSaleslocationId = '6539b18e-b3ed-11ec-b6fe-49787f11d90d'
+	WHERE name = '키보드';
+
+select p.id,address, addressDetail, p.name, p.price
+from product p, product_saleslocation ps 
+where p.productSaleslocationId  = ps.id;
+
+select * from product_category pc;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 퀴즈 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+insert into product_category(id, name)
+values(uuid(), 'pc');
+
+update product 
+	SET productCategoryId = '1a84bcf2-b3f1-11ec-b6fe-49787f11d90d'
+	WHERE name = '키보드';
+
+
+select p.name, p.price, pc.name as category_name
+from product p , product_category pc 
+WHERE p.productCategoryId = pc.id ;
+
+
