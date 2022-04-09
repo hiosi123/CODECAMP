@@ -2,7 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Gear {
+type CarKind {
+  id: String!
+  name: String!
+}
+
+type DriveMethod {
   id: String!
   name: String!
 }
@@ -12,7 +17,7 @@ type Fuel {
   name: String!
 }
 
-type CarKind {
+type Gear {
   id: String!
   name: String!
 }
@@ -64,6 +69,7 @@ type Used_car {
   gear: Gear!
   fuel: Fuel!
   carkind: CarKind!
+  driveMethod: DriveMethod!
   model: Model!
   dealer: Dealer!
   optionDetail: [OptionDetail!]!
@@ -89,7 +95,10 @@ type Mutation {
   updateProduct(carId: Float!, used_carInput: UpdateUsed_carInput!): Used_car!
   deleteProduct(carId: Float!): Boolean!
   restoreProduct(carId: Float!): Boolean!
-  createGear(name: String!): Gear!
+  createCarKind(id: String!, name: String!): CarKind!
+  createDriveMethod(id: String!, name: String!): DriveMethod!
+  createFuel(id: String!, name: String!): Fuel!
+  createGear(id: String!, name: String!): Gear!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(id: String!, updateUserInput: UpdateUserInput!): User!
   deleteUser(id: String!): Boolean!
@@ -109,13 +118,11 @@ input CreateUsed_carInput {
   is_repair: Boolean!
   price: Int!
   is_sold: Boolean = false
-  fuel: fuelInput!
+  fuel: String!
   gear: String!
+  carkind: String!
+  driveMethod: String!
   optionDetail: [String!]!
-}
-
-input fuelInput {
-  name: String!
 }
 
 input UpdateUsed_carInput {
@@ -132,8 +139,10 @@ input UpdateUsed_carInput {
   is_repair: Boolean
   price: Int
   is_sold: Boolean = false
-  fuel: fuelInput
+  fuel: String
   gear: String
+  carkind: String
+  driveMethod: String
   optionDetail: [String!]
 }
 

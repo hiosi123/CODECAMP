@@ -87,17 +87,18 @@ export class Used_car {
   gear: Gear;
 
   @JoinColumn() // 컬럼을 가지고 연결하겠다, 기준이 있는 곳에 죠인 컬럼을 둔다
-  @OneToOne(() => Fuel) //mysql 에 알려줘야함 one to one 관계라는것을
+  @ManyToOne(() => Fuel) //mysql 에 알려줘야함 one to one 관계라는것을
   @Field(() => Fuel)
   fuel: Fuel;
 
   @JoinColumn() // 컬럼을 가지고 연결하겠다, 기준이 있는 곳에 죠인 컬럼을 둔다
-  @OneToOne(() => CarKind) //mysql 에 알려줘야함 one to one 관계라는것을
+  @ManyToOne(() => CarKind) //mysql 에 알려줘야함 one to one 관계라는것을
   @Field(() => CarKind)
   carkind: CarKind;
 
   @JoinColumn() // 컬럼을 가지고 연결하겠다, 기준이 있는 곳에 죠인 컬럼을 둔다
-  @OneToOne(() => DriveMethod) //mysql 에 알려줘야함 one to one 관계라는것을
+  @ManyToOne(() => DriveMethod) //mysql 에 알려줘야함 one to one 관계라는것을
+  @Field(() => DriveMethod)
   driveMethod: DriveMethod;
 
   @ManyToOne(() => Model)

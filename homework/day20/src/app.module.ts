@@ -2,6 +2,9 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CarKindModule } from './apis/carKind/carKind.module';
+import { DriveMethodModule } from './apis/driveMethod/driveMethod.module';
+import { FuelModule } from './apis/fuel/fuel.module';
 
 import { GearModule } from './apis/gearKind/gearkind.module';
 import { Used_carModule } from './apis/used_cars/used_car.module';
@@ -12,6 +15,9 @@ import { UserModule } from './apis/user/user.module';
 @Module({
   imports: [
     Used_carModule,
+    CarKindModule,
+    DriveMethodModule,
+    FuelModule,
     GearModule,
     UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({

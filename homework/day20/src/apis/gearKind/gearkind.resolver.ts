@@ -10,8 +10,9 @@ export class GearResolver {
   ) {}
   @Mutation(() => Gear) // 프런트에서 받아가는 데이터 타입
   createGear(
+    @Args('id') id: string,
     @Args('name') name: string, //
   ) {
-    return this.createGearService.create({ name });
+    return this.createGearService.create({ id, name });
   }
 }

@@ -1,7 +1,6 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Fuel } from '../fuel/entities/fuel.entity';
 
 import { OptionDetail } from '../optionDetail/entities/optionDetail.entity';
 
@@ -13,40 +12,35 @@ export class Used_carService {
     @InjectRepository(Used_car) //db에 접근하기 위한 코딩
     private readonly used_carRepository: Repository<Used_car>, //db에 접근하기 위한 코딩
 
-    @InjectRepository(Fuel)
-    private readonly fuelRepository: Repository<Fuel>,
-
     @InjectRepository(OptionDetail)
     private readonly optionDetailRepository: Repository<OptionDetail>,
   ) {}
 
   async findAll() {
     return await this.used_carRepository.find({
-      relations: ['gear', 'fuel', 'optionDetail'],
+      relations: ['gear', 'fuel', 'optionDetail', 'carkind'],
     });
   }
   async findAllDel() {
     return await this.used_carRepository.find({
       withDeleted: true,
-      relations: ['gear', 'fuel', 'optionDetail'],
+      relations: ['gear', 'fuel', 'optionDetail', 'carkind'],
     });
   }
 
   async fineOne({ carId }) {
     const result1 = await this.used_carRepository.findOne({
       where: { car_id: carId },
-      relations: ['gear', 'fuel', 'optionDetail'],
+      relations: ['gear', 'fuel', 'optionDetail', 'carkind'],
     });
     console.log(result1);
     return result1;
   }
 
   async create({ used_carInput }) {
-    const { optionDetail, fuel, gear, ...rest } = used_carInput;
+    const { driveMethod, carkind, optionDetail, fuel, gear, ...rest } =
+      used_carInput;
     // 상품을 데이터 베이스에 저장
-    const result1 = await this.fuelRepository.save({
-      ...fuel,
-    });
 
     const result2 = [];
     for (let i = 0; i < optionDetail.length; i++) {
@@ -66,7 +60,9 @@ export class Used_carService {
 
     const result = await this.used_carRepository.save({
       ...rest,
-      fuel: result1,
+      driveMethod: { id: driveMethod },
+      carkind: { id: carkind },
+      fuel: { id: fuel },
       gear: { id: gear },
       optionDetail: result2,
     });

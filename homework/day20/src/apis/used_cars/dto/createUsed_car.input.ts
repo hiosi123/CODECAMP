@@ -1,5 +1,4 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { fuelInput } from 'src/apis/fuel/dto/fuel.input';
 
 @InputType()
 export class CreateUsed_carInput {
@@ -42,11 +41,17 @@ export class CreateUsed_carInput {
   @Field(() => Boolean, { defaultValue: 0 })
   is_sold: boolean;
 
-  @Field(() => fuelInput)
-  fuel: fuelInput;
+  @Field(() => String)
+  fuel: string;
 
   @Field(() => String)
   gear: string;
+
+  @Field(() => String)
+  carkind: string;
+
+  @Field(() => String)
+  driveMethod: string;
 
   @Field(() => [String])
   optionDetail: string[];

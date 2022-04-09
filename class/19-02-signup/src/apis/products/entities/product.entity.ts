@@ -27,7 +27,7 @@ export class Product {
   name: string;
 
   @Column()
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   description: string;
 
   @Column({ unique: true })
