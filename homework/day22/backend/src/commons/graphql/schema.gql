@@ -1,0 +1,167 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type CarKind {
+  id: String!
+  name: String!
+}
+
+type Brand {
+  id: String!
+  brandName: String!
+}
+
+type Model {
+  id: String!
+  modelName: String!
+  brand: Brand!
+}
+
+type Dealer {
+  id: String!
+  name: String!
+  phone: Int!
+  location: String!
+  image: String!
+}
+
+type DriveMethod {
+  id: String!
+  name: String!
+}
+
+type Fuel {
+  id: String!
+  name: String!
+}
+
+type Gear {
+  id: String!
+  name: String!
+}
+
+type OptionDetail {
+  id: String!
+  name: String!
+  used_car: [Used_car!]!
+}
+
+type Used_car {
+  car_id: Int!
+  is_nativeCar: Boolean!
+  cc: Int!
+  year: Int!
+  color: String!
+  km: Int!
+  seater: String!
+  reportNumber: String!
+  is_seizuer: Boolean!
+  carIntro: String!
+  is_accident: Boolean!
+  is_repair: Boolean!
+  price: Int!
+  is_sold: Boolean!
+  gear: Gear!
+  fuel: Fuel!
+  carkind: CarKind!
+  driveMethod: DriveMethod!
+  model: Model!
+  dealer: Dealer!
+  optionDetail: [OptionDetail!]!
+  user: [User!]!
+}
+
+type User {
+  id: String!
+  email: String!
+  name: String!
+  phone: String!
+  age: Int!
+  address: String!
+  used_car: [Used_car!]!
+}
+
+type Query {
+  fetchProducts: [Used_car!]!
+  fetchDeleted: [Used_car!]!
+  fetchProduct(carId: Float!): Used_car!
+  fetchUsers: [User!]!
+  fetchUser: User!
+}
+
+type Mutation {
+  login(email: String!, password: String!): String!
+  restoreAccessToken: String!
+  createProduct(used_carInput: CreateUsed_carInput!): Used_car!
+  updateProduct(carId: Float!, used_carInput: UpdateUsed_carInput!): Used_car!
+  deleteProduct(carId: Float!): Boolean!
+  restoreProduct(carId: Float!): Boolean!
+  createCarKind(id: String!, name: String!): CarKind!
+  createDriveMethod(id: String!, name: String!): DriveMethod!
+  createFuel(id: String!, name: String!): Fuel!
+  createGear(id: String!, name: String!): Gear!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(originalPassword: String!, updateUserInput: UpdateUserInput!): User!
+  deleteUser(id: String!): Boolean!
+}
+
+input CreateUsed_carInput {
+  is_nativeCar: Boolean!
+  cc: Int!
+  year: Int!
+  color: String!
+  km: Int!
+  seater: String!
+  reportNumber: String!
+  is_seizuer: Boolean!
+  carIntro: String!
+  is_accident: Boolean!
+  is_repair: Boolean!
+  price: Int!
+  is_sold: Boolean = false
+  fuel: String!
+  gear: String!
+  carkind: String!
+  driveMethod: String!
+  optionDetail: [String!]!
+}
+
+input UpdateUsed_carInput {
+  is_nativeCar: Boolean
+  cc: Int
+  year: Int
+  color: String
+  km: Int
+  seater: String
+  reportNumber: String
+  is_seizuer: Boolean
+  carIntro: String
+  is_accident: Boolean
+  is_repair: Boolean
+  price: Int
+  is_sold: Boolean = false
+  fuel: String
+  gear: String
+  carkind: String
+  driveMethod: String
+  optionDetail: [String!]
+}
+
+input CreateUserInput {
+  email: String!
+  name: String!
+  password: String!
+  phone: String!
+  age: Int!
+  address: String!
+}
+
+input UpdateUserInput {
+  email: String
+  name: String
+  password: String
+  phone: String
+  age: Int
+  address: String
+}
