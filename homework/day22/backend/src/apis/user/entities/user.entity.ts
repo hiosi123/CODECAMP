@@ -38,6 +38,10 @@ export class User {
   @Field(() => String)
   address: string;
 
+  @Column()
+  @Field(() => String)
+  provider: string;
+
   @DeleteDateColumn()
   deleteAt: Date;
 

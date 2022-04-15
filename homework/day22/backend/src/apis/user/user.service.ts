@@ -18,9 +18,9 @@ export class UserService {
     return await this.userRepository.find();
   }
 
-  async findOne({ email }) {
+  async findOne({ email, provider }) {
     return await this.userRepository.findOne({
-      where: { email }, //
+      where: { email, provider }, //
       relations: ['used_car'],
     });
   }
@@ -28,6 +28,7 @@ export class UserService {
   async create({ createUserInput }) {
     const user = await this.userRepository.findOne({
       email: createUserInput.email,
+      provider: createUserInput.provider,
     });
     if (user) throw new ConflictException('이미 등록된 이메일 입니다');
     return await this.userRepository.save(createUserInput);
@@ -35,7 +36,7 @@ export class UserService {
 
   async update({ userEmail, updateUserInput, originalPassword }) {
     const user = await this.userRepository.findOne({
-      where: { email: userEmail },
+      where: { email: userEmail, provider: updateUserInput.provider },
       relations: ['used_car'],
     });
 

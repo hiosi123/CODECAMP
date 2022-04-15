@@ -16,9 +16,10 @@ export class AuthResolver {
   async login(
     @Args('email') email: string,
     @Args('password') password: string,
+    @Args('provider') provider: string,
     @Context() context: any,
   ) {
-    const user = await this.userService.findOne({ email });
+    const user = await this.userService.findOne({ email, provider });
 
     if (!user)
       throw new UnprocessableEntityException('존재하지 않는 이메일 입니다');

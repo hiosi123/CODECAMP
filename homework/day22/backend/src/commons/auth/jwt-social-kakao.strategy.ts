@@ -27,6 +27,7 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
       age: 0,
       phone: '01020311883',
       address: '구로구',
+      provider: profile.provider,
     };
   }
 }

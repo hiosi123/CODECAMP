@@ -19,4 +19,7 @@ export class CreateUserInput {
 
   @Field(() => String)
   address: string;
+
+  @Field(() => String)
+  provider: string;
 }

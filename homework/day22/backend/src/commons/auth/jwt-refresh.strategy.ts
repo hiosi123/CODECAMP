@@ -28,6 +28,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     return {
       id: payload.sub, //리턴이 된거임 context 라는 곳으로
       email: payload.email,
+      provider: payload.provider,
     };
   }
 }

@@ -8,6 +8,7 @@ import { DriveMethodModule } from './apis/driveMethod/driveMethod.module';
 import { FuelModule } from './apis/fuel/fuel.module';
 
 import { GearModule } from './apis/gearKind/gearkind.module';
+import { PointTransactionModule } from './apis/Transaction/pointTransaction.module';
 import { Used_carModule } from './apis/used_cars/used_car.module';
 import { UserModule } from './apis/user/user.module';
 // import { AppController } from './app.controller';
@@ -16,6 +17,7 @@ import { UserModule } from './apis/user/user.module';
 @Module({
   imports: [
     AuthModule,
+    PointTransactionModule,
     Used_carModule,
     CarKindModule,
     DriveMethodModule,

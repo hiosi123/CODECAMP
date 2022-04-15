@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { ProvidedRequiredArgumentsOnDirectivesRule } from 'graphql/validation/rules/ProvidedRequiredArgumentsRule';
 import { Strategy } from 'passport-google-oauth20';
 
 //google 로그인용 passport
@@ -28,6 +29,7 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
       age: 0,
       phone: '01020311883',
       address: '구로구',
+      provider: profile.provider,
     };
   }
 }

@@ -27,6 +27,7 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
       age: 0,
       phone: '01020311883',
       address: '구로구',
+      provider: profile.provider,
     };
   }
 }

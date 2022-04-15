@@ -30,7 +30,10 @@ export class UserResolver {
     console.log('currentUser는?', currentUser);
     console.log('fetchUser 실행 완료 !!!');
 
-    return this.userService.findOne({ email: currentUser.email });
+    return this.userService.findOne({
+      email: currentUser.email,
+      provider: currentUser.provider,
+    });
   }
 
   @Mutation(() => User)
