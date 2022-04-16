@@ -15,21 +15,26 @@ async function startCrawling() {
   ); //여기 페이지로 이동
   await page.waitForTimeout(1000);
 
+  const clicked = await page.click(
+    `#topReviewerList > li:nth-child(2) > div.txt`
+  );
+  console.log(clicked);
+
   const reviewtext = await page.$eval(
-    `#topReviewerList > li:nth-child(1) > div.txt > a > dl > dd`,
+    `#layerWrap920 > div > div > div.reviewer-profile-content > div > div > div.review-detail-view__content.scrbar > p.rw-box__description`,
     (el) => el.textContent
   );
   console.log(reviewtext);
 
-  let data = await page.click(
-    `#topReviewerList > li:nth-child(2) > div.txt` //
-  );
-  const rating = data.$eval(
-    `#layerWrap920 > div > div > div.reviewer-profile-content > div > div > div.review-detail-view__content.scrbar > div.rw-box__first-line > span.review_point > span`
-  );
+  // console.log(reviewtext);
 
-  console.log(data);
-  console.log(rating);
+  // let rating = await page.$eval(
+  //   `#layerWrap920 > div > div > div.reviewer-profile-content > div > div > div.review-detail-view__content.scrbar > div.rw-box__first-line > span.review_point > span`,
+  //   (el) => el.textContent
+  // );
+
+  // console.log(data);
+  // console.log(rating);
 
   // let evalData = await data.evaluate(
   //   "#layerWrap920 > div > div > div.reviewer-profile-content > div > div > div.review-detail-view__content.scrbar > div.rw-box__first-line > span.review_point > span",
