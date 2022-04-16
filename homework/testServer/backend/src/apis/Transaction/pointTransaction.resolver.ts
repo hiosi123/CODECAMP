@@ -32,14 +32,12 @@ export class PointTransactionResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => PointTransaction)
   deleteTransaction(
-    @Args('amount') amount: number,
     @Args('merchant_uid') merchant_uid: number,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
     return this.pointTransactionService.delete({
       currentUser,
       merchant_uid,
-      amount,
     });
   }
 }

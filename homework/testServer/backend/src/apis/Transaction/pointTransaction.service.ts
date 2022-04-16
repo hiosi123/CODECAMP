@@ -2,6 +2,7 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { Repository } from 'typeorm';
+import { IamportService } from '../iamport/iamport.service';
 import { Used_car } from '../used_cars/entities/used_car.entity';
 import { User } from '../user/entities/user.entity';
 import {
@@ -20,53 +21,38 @@ export class PointTransactionService {
 
     @InjectRepository(Used_car)
     private readonly usedCarRepository: Repository<Used_car>,
+
+    private readonly iamportService: IamportService,
   ) {}
 
   async create({ impUid, amount, currentUser, merchant_uid }) {
-    const imp_uid_token = await axios({
-      url: 'https://api.iamport.kr/users/getToken',
-      method: 'post', // POST method
-      headers: { 'Content-Type': 'application/json' }, // "Content-Type": "application/json"
-      data: {
-        imp_key: '6436672414334897', // REST API키
-        imp_secret:
-          '1750f6c0346700ba0bd71145471462743354710e00673094edbfa720e1825da9d8709baee6b86bb0', // REST API Secret
-      },
-    });
+    const accessToken = await this.iamportService.getAccessToken();
 
     console.log('===============');
-    console.log('🍎', imp_uid_token.data.response.access_token);
+    console.log('🍎', accessToken);
     console.log('===============');
 
-    const auth = imp_uid_token.data.response.access_token;
-
-    const get_imp_uid = await axios({
-      url: `https://api.iamport.kr/payments/${impUid}`,
-      method: 'get', // GET method
-      headers: {
-        'Content-Type': 'application/json', // "Content-Type": "application/json"
-        Authorization: `Bearer ${auth}`, // 발행된 액세스 토큰
-      },
+    const from_Import = await this.iamportService.checkImpUid({
+      accessToken,
+      impUid,
     });
 
     console.log('+++++++++');
-    console.log(get_imp_uid);
+    console.log(from_Import); //아임포트 사이트에서 가져온 정보들
     console.log('+++++++++');
 
-    const FromIMPORT = get_imp_uid.data.response.imp_uid;
-
-    if (impUid !== FromIMPORT)
-      throw new UnprocessableEntityException('impUid 가 일치하지 않습니다.');
+    const merchant_uid_fromImport = from_Import.merchant_uid;
 
     const used_car = await this.usedCarRepository.findOne({
-      car_id: merchant_uid,
+      car_id: merchant_uid_fromImport,
     });
+
     if (used_car.is_sold === true)
       throw new UnprocessableEntityException('이미 구매된 상품입니다');
 
-    if (used_car.price !== amount)
+    if (from_Import.amount !== amount)
       throw new UnprocessableEntityException(
-        '요청한 가격과, 자동차의 가격이 일치하지 않습니다',
+        '지불한 가격과, 자동차의 가격이 일치하지 않습니다',
       );
 
     // pointTransactionTable 에 거래 기록 1을 생성
@@ -89,49 +75,36 @@ export class PointTransactionService {
     return pointTransaction;
   }
 
-  async delete({ currentUser, merchant_uid, amount }) {
-    const pointTransaction = await this.pointTransactionRepository.findOne({
-      where: { used_car: merchant_uid },
+  async delete({ currentUser, merchant_uid }) {
+    const accessToken = await this.iamportService.getAccessToken();
+    //이 과정에서 안차아지면 사기임
+    const from_Import = await this.iamportService.checkMerchantUid({
+      accessToken,
+      merchant_uid,
     });
+    console.log('🥰', from_Import);
+    const getCar = from_Import.merchant_uid;
+
+    const pointTransaction = await this.pointTransactionRepository.findOne({
+      where: { used_car: getCar },
+    });
+
     console.log('🍌', pointTransaction);
     if (pointTransaction.status === 'CANCEL')
       throw new UnprocessableEntityException('이미 취소된 상품입니다.');
 
-    const imp_uid_token = await axios({
-      url: 'https://api.iamport.kr/users/getToken',
-      method: 'post', // POST method
-      headers: { 'Content-Type': 'application/json' }, // "Content-Type": "application/json"
-      data: {
-        imp_key: '6436672414334897', // REST API키
-        imp_secret:
-          '1750f6c0346700ba0bd71145471462743354710e00673094edbfa720e1825da9d8709baee6b86bb0', // REST API Secret
-      },
-    });
-    const auth = imp_uid_token.data.response.access_token;
-    console.log('🍎', auth);
-    const value = pointTransaction.impUid;
-
-    const get_imp_uid = await axios({
-      url: `https://api.iamport.kr/payments/cancel/`,
-      method: 'post', // GET method
-      data: { imp_uid: `${value}` },
-      headers: {
-        'Content-Type': 'application/json', // "Content-Type": "application/json"
-        Authorization: `Bearer ${auth}`, // 발행된 액세스 토큰
-      },
-    });
-
     const used_car = await this.usedCarRepository.findOne({
       car_id: merchant_uid,
     });
+
     await this.usedCarRepository.update(
       { car_id: used_car.car_id }, //찾아올사람
       { is_sold: false }, // 바꿀 내용
     );
 
     const result = await this.pointTransactionRepository.save({
-      impUid: value,
-      amount: amount,
+      impUid: from_Import.imp_uid,
+      amount: from_Import.amount,
       used_car: merchant_uid,
       user: currentUser,
       status: POINT_TRANSACTION_STATUS_ENUM.CANCEL,

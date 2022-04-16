@@ -8,6 +8,7 @@ import { DriveMethodModule } from './apis/driveMethod/driveMethod.module';
 import { FuelModule } from './apis/fuel/fuel.module';
 
 import { GearModule } from './apis/gearKind/gearkind.module';
+import { IamportService } from './apis/iamport/iamport.service';
 import { PointTransactionModule } from './apis/Transaction/pointTransaction.module';
 import { Used_carModule } from './apis/used_cars/used_car.module';
 import { UserModule } from './apis/user/user.module';
@@ -23,6 +24,7 @@ import { UserModule } from './apis/user/user.module';
     DriveMethodModule,
     FuelModule,
     GearModule,
+    IamportService,
     UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

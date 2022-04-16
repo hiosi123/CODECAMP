@@ -17,7 +17,7 @@
     <script>
       const myAmount = 100;
       //   let merchant_uid = 3;
-      function mypayment() {
+      async function mypayment() {
         // const myAmount = Number(document.getElementById("amount").value);
 
         const IMP = window.IMP; // 생략 가능
@@ -28,7 +28,7 @@
             pg: "html5_inicis",
             pay_method: "card",
             name: "Mercedes-Benz",
-            merchant_uid: 15,
+            merchant_uid: 21,
             amount: myAmount,
             buyer_email: "gildong@gmail.com",
             buyer_name: "홍길동",
@@ -57,7 +57,7 @@
                 {
                   headers: {
                     authorization:
-                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imhpb3NpQG5hdmVyLmNvbSIsInN1YiI6IjE2MGQ4OTIzLWQxM2UtNDE2MS04OTQ0LTk0ZmM4ZjVmZmFmMiIsInByb3ZpZGVyIjoiZ3JhcGhxbCIsImlhdCI6MTY0OTk0MDA2MiwiZXhwIjoxNjUwMDI2NDYyfQ.tH2tIFUGBheDtY3aLe3b3xJlt44zUX2-jb1CnS5Jsf8",
+                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imhpb3NpQG5hdmVyLmNvbSIsInN1YiI6ImY0ZTBhZDYzLWIxMzQtNGE5Zi1iYmIxLTliNTUyNjQ0NDU3NSIsInByb3ZpZGVyIjoiZ3JhcGhxbCIsImlhdCI6MTY1MDA5MTA0MywiZXhwIjoxNjUwMTc3NDQzfQ.h1hpXYCMGXI8gYli9sZIdpMCB_N8DOYHyDXQgaYXwIQ",
                   },
                 }
               );
@@ -75,7 +75,7 @@
           {
             query: `
                 mutation {
-                  deleteTransaction(merchant_uid: 15,amount:100 ) {
+                  deleteTransaction(merchant_uid: 21 ) {
                     id
                   }
                 }
@@ -84,7 +84,7 @@
           {
             headers: {
               authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imhpb3NpQG5hdmVyLmNvbSIsInN1YiI6IjE2MGQ4OTIzLWQxM2UtNDE2MS04OTQ0LTk0ZmM4ZjVmZmFmMiIsInByb3ZpZGVyIjoiZ3JhcGhxbCIsImlhdCI6MTY0OTk0MDA2MiwiZXhwIjoxNjUwMDI2NDYyfQ.tH2tIFUGBheDtY3aLe3b3xJlt44zUX2-jb1CnS5Jsf8",
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imhpb3NpQG5hdmVyLmNvbSIsInN1YiI6ImY0ZTBhZDYzLWIxMzQtNGE5Zi1iYmIxLTliNTUyNjQ0NDU3NSIsInByb3ZpZGVyIjoiZ3JhcGhxbCIsImlhdCI6MTY1MDA5MTA0MywiZXhwIjoxNjUwMTc3NDQzfQ.h1hpXYCMGXI8gYli9sZIdpMCB_N8DOYHyDXQgaYXwIQ",
             },
           }
         );

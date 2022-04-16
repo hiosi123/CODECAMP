@@ -115,7 +115,7 @@ type Mutation {
   login(email: String!, password: String!, provider: String!): String!
   restoreAccessToken: String!
   createPointTransaction(impUid: String!, amount: Float!, merchant_uid: Float!): PointTransaction!
-  deleteTransaction(amount: Float!, merchant_uid: Float!): PointTransaction!
+  deleteTransaction(merchant_uid: Float!): PointTransaction!
   createProduct(used_carInput: CreateUsed_carInput!): Used_car!
   updateProduct(carId: Float!, used_carInput: UpdateUsed_carInput!): Used_car!
   deleteProduct(carId: Float!): Boolean!
