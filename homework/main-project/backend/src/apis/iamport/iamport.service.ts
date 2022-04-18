@@ -1,4 +1,7 @@
-import { UnprocessableEntityException } from '@nestjs/common';
+import {
+  ConflictException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import axios from 'axios';
 
 export class IamportService {
@@ -29,9 +32,9 @@ export class IamportService {
         },
       });
     } catch (error) {
-      if (error.response.status === 404) {
-        console.log('404!!');
-        throw new UnprocessableEntityException('이미 구매된 상품입니다');
+      if (error.response.status === 409) {
+        console.log('409!!');
+        throw new ConflictException('이미 구매된 상품입니다');
       }
     }
     // .catch((error) => {

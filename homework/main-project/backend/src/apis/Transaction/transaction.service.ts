@@ -95,9 +95,18 @@ export class PointTransactionService {
     });
     console.log('🥰', from_Import);
 
+    const userInfo = await this.userRepository.findOne({
+      email: currentUser.email,
+    });
+
     const pointTransaction = await this.pointTransactionRepository.findOne({
       where: { used_car: merchant_uid },
+      relations: ['user'],
     });
+    console.log('🍋', userInfo);
+    console.log('😇 ', pointTransaction);
+    if (userInfo.id !== pointTransaction.user.id)
+      throw new UnprocessableEntityException('구매하신 품목이 아닙니다.');
 
     console.log('🍌', pointTransaction);
     if (pointTransaction.status === 'CANCEL')
