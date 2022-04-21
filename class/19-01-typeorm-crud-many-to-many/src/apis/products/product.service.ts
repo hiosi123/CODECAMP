@@ -61,9 +61,11 @@ export class ProductService {
     for (let i = 0; i < productTags.length; i++) {
       const tagname = productTags[i].replace('#', '');
       // 이미 등록된 태그인지 확인해보기
+
       const prevTag = await this.productTagRepository.findOne({
         name: tagname,
       });
+
       //기존에 태그가 존재한다면
       if (prevTag) {
         result3.push(prevTag);
