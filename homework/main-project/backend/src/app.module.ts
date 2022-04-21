@@ -6,8 +6,10 @@ import { AuthModule } from './apis/auth/auth.module';
 import { BrandModule } from './apis/brand/brand.module';
 import { CarKindModule } from './apis/carKind/carKind.module';
 import { CarModelModule } from './apis/carModel/carModel.module';
+import { CarImageModule } from './apis/car_image/car_image.module';
 import { DealerModule } from './apis/dealer/dealer.module';
 import { DriveMethodModule } from './apis/driveMethod/driveMethod.module';
+import { FileModule } from './apis/file/file.module';
 import { FuelModule } from './apis/fuel/fuel.module';
 
 import { GearModule } from './apis/gearKind/gearkind.module';
@@ -22,6 +24,8 @@ import { UserModule } from './apis/user/user.module';
   imports: [
     AuthModule,
     BrandModule,
+    FileModule,
+    CarImageModule,
     DealerModule,
     PointTransactionModule,
     Used_carModule,

@@ -1,7 +1,7 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { IamportService } from '../iamport/iamport.service';
 import { Used_car } from '../used_cars/entities/used_car.entity';
 import { User } from '../user/entities/user.entity';
@@ -23,6 +23,8 @@ export class PointTransactionService {
     private readonly usedCarRepository: Repository<Used_car>,
 
     private readonly iamportService: IamportService,
+
+    private readonly connection: Connection,
   ) {}
 
   async prepare({ merchant_uid, amount, currentUser }) {
@@ -53,37 +55,53 @@ export class PointTransactionService {
 
     const merchant_uid_fromImport = from_Import.merchant_uid;
 
-    const used_car = await this.usedCarRepository.findOne({
-      car_id: merchant_uid_fromImport,
-    });
+    const queryRunner = await this.connection.createQueryRunner();
+    await queryRunner.connect();
 
-    if (used_car.is_sold === true)
-      throw new UnprocessableEntityException('이미 구매된 상품입니다');
+    await queryRunner.startTransaction('SERIALIZABLE');
 
-    if (from_Import.amount !== amount) {
-      await this.iamportService.cancelOrderWithUid({ accessToken, impUid });
-      throw new UnprocessableEntityException(
-        '지불한 가격과, 자동차의 가격이 일치하지 않습니다',
+    try {
+      const used_car = await queryRunner.manager.findOne(
+        Used_car,
+        { car_id: merchant_uid_fromImport },
+        { lock: { mode: 'pessimistic_write' } },
       );
-    }
-    // pointTransactionTable 에 거래 기록 1을 생성
-    const pointTransaction = await this.pointTransactionRepository.save({
-      impUid: impUid,
-      amount: amount,
-      used_car: merchant_uid,
-      user: currentUser,
-      status: POINT_TRANSACTION_STATUS_ENUM.PAYMENT,
-    });
-    //2. 유저 정보 가져오기
-    //const user = await this.userRepository.findOne({ id: currentUser.id });
-    //3. 자동차 정보 가져오기
 
-    this.usedCarRepository.update(
-      { car_id: used_car.car_id }, //찾아올사람
-      { is_sold: true }, // 바꿀 내용
-    );
-    //4. 최종결과 프런트엔드에 돌려주기
-    return pointTransaction;
+      if (used_car.is_sold === true)
+        throw new UnprocessableEntityException('이미 구매된 상품입니다');
+
+      if (from_Import.amount !== amount) {
+        await this.iamportService.cancelOrderWithUid({ accessToken, impUid });
+        throw new UnprocessableEntityException(
+          '지불한 가격과, 자동차의 가격이 일치하지 않습니다',
+        );
+      }
+      // pointTransactionTable 에 거래 기록 1을 생성
+      const pointTransaction = await this.pointTransactionRepository.create({
+        impUid: impUid,
+        amount: amount,
+        used_car: merchant_uid,
+        user: currentUser,
+        status: POINT_TRANSACTION_STATUS_ENUM.PAYMENT,
+      });
+      await queryRunner.manager.save(pointTransaction);
+      //2. 유저 정보 가져오기
+      //const user = await this.userRepository.findOne({ id: currentUser.id });
+      //3. 자동차 정보 가져오기
+
+      const updateUsedCar = this.usedCarRepository.create({
+        ...used_car, //찾아올사람
+        is_sold: true, // 바꿀 내용
+      });
+      await queryRunner.manager.save(updateUsedCar);
+      await queryRunner.commitTransaction();
+      //4. 최종결과 프런트엔드에 돌려주기
+      return pointTransaction;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async delete({ currentUser, merchant_uid }) {
@@ -95,44 +113,65 @@ export class PointTransactionService {
     });
     console.log('🥰', from_Import);
 
-    const userInfo = await this.userRepository.findOne({
-      email: currentUser.email,
-    });
+    const queryRunner = await this.connection.createQueryRunner();
+    await queryRunner.connect(); //연결
+    //transaction 시작
+    await queryRunner.startTransaction('SERIALIZABLE'); // 시작
 
-    const pointTransaction = await this.pointTransactionRepository.findOne({
-      where: { used_car: merchant_uid },
-      relations: ['user'],
-    });
-    console.log('🍋', userInfo);
-    console.log('😇 ', pointTransaction);
-    if (userInfo.id !== pointTransaction.user.id)
-      throw new UnprocessableEntityException('구매하신 품목이 아닙니다.');
+    try {
+      const userInfo = await queryRunner.manager.findOne(
+        User,
+        { email: currentUser.email },
+        { lock: { mode: 'pessimistic_write' } },
+      );
 
-    console.log('🍌', pointTransaction);
-    if (pointTransaction.status === 'CANCEL')
-      throw new UnprocessableEntityException('이미 취소된 상품입니다.');
+      const pointTransaction = await queryRunner.manager.findOne(
+        PointTransaction,
+        { where: { used_car: merchant_uid }, relations: ['user'] },
+      );
+      console.log('🍋', userInfo);
+      console.log('😇 ', pointTransaction);
+      if (userInfo.id !== pointTransaction.user.id)
+        throw new UnprocessableEntityException('구매하신 품목이 아닙니다.');
 
-    await this.iamportService.cancelOrderWithMuid({
-      accessToken,
-      merchant_uid,
-    });
+      console.log('🍌', pointTransaction);
+      if (pointTransaction.status === 'CANCEL')
+        throw new UnprocessableEntityException('이미 취소된 상품입니다.');
 
-    const used_car = await this.usedCarRepository.findOne({
-      car_id: merchant_uid,
-    });
+      await this.iamportService.cancelOrderWithMuid({
+        accessToken,
+        merchant_uid,
+      });
 
-    await this.usedCarRepository.update(
-      { car_id: used_car.car_id }, //찾아올사람 아이디
-      { is_sold: false }, // 바꿀 내용
-    );
+      const used_car = await queryRunner.manager.findOne(
+        Used_car, //
+        { car_id: merchant_uid },
+        { lock: { mode: 'pessimistic_write' } },
+      );
 
-    const result = await this.pointTransactionRepository.save({
-      impUid: from_Import.imp_uid,
-      amount: from_Import.amount,
-      used_car: merchant_uid,
-      user: currentUser,
-      status: POINT_TRANSACTION_STATUS_ENUM.CANCEL,
-    });
-    return result;
+      const updateCar = this.usedCarRepository.create({
+        ...used_car, //찾아올사람 아이디
+        is_sold: false, // 바꿀 내용
+      });
+      await queryRunner.manager.save(updateCar);
+
+      const result = await this.pointTransactionRepository.create({
+        impUid: from_Import.imp_uid,
+        amount: from_Import.amount,
+        used_car: merchant_uid,
+        user: currentUser,
+        status: POINT_TRANSACTION_STATUS_ENUM.CANCEL,
+      });
+
+      await queryRunner.manager.save(result);
+
+      await queryRunner.commitTransaction();
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      //연결해제
+      await queryRunner.release(); //연결 해제를 해줘야 한다.
+    }
   }
 }

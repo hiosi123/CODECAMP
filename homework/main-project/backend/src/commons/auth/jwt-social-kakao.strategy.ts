@@ -9,7 +9,7 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
   constructor() {
     super({
       //검중부, Bearer 뺴고 넣어야함, 내장 되어있음 .fromauthheadera
-      clientID: '0216208d5874a88c615e223e4ab76f27', //카카오
+      clientID: process.env.KAKAO_KEY, //카카오
       callbackURL: 'http://localhost:3000/login/kakao',
       //사이트마다 다르다
       scope: ['profile_nickname', 'account_email', 'gender'],

@@ -9,8 +9,8 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
   constructor() {
     super({
       //검중부, Bearer 뺴고 넣어야함, 내장 되어있음 .fromauthheadera
-      clientID: 'XoZCTi17UlPH9BjGvjjF', //구굴에서 들고오셈
-      clientSecret: 'xrqv6zzdVr',
+      clientID: process.env.NAVER_KEY, //구굴에서 들고오셈
+      clientSecret: process.env.NAVER_SECRET,
       callbackURL: 'http://localhost:3000/login/naver',
       //사이트마다 다르다
     });

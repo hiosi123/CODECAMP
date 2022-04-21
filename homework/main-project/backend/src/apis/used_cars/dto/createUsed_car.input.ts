@@ -58,7 +58,4 @@ export class CreateUsed_carInput {
 
   @Field(() => String)
   model: string;
-
-  @Field(() => String)
-  dealer: string;
 }

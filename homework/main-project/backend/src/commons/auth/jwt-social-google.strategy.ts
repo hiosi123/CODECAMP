@@ -10,9 +10,8 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
     super({
       //검중부, Bearer 뺴고 넣어야함, 내장 되어있음 .fromauthheadera
-      clientID:
-        '552027570615-lehs5mq4sok5e3s4h9r3l6a3hacdm8uj.apps.googleusercontent.com', //구굴에서 들고오셈
-      clientSecret: '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',
+      clientID: process.env.GOOGLE_KEY, //구굴에서 들고오셈
+      clientSecret: process.env.GOOGLE_SECRET,
       callbackURL: 'http://localhost:3000/login/google',
       scope: ['email', 'profile'], //사이트마다 다르다
     });
