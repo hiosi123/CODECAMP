@@ -1,0 +1,45 @@
+show procedure status;
+
+create procedure mydummydata()
+begin
+	declare i int default 1;
+	while i <= 5000000 do 
+		insert into board(writer, title, contents) values('철수',rand(),'내용');
+		set i = i + 1;
+	end while;
+end;
+
+use myproject03;
+
+call mydummydata();
+
+select count(*) from board;
+
+
+select * 
+from board b 
+where title = '0.1991146115577916';
+
+explain
+select * 
+from board b 
+where title = '0.1991146115577916';
+
+
+select *
+from board b 
+where number = 19;
+
+explain
+select *
+from board b 
+where number = 19;
+
+show index from board;
+
+create index ide_title on board(title);
+
+
+select *
+from board b 
+where title = '0.1991146115577916';

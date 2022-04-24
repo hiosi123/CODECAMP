@@ -1,6 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Brand } from 'src/apis/brand/entities/brand.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -16,4 +22,7 @@ export class Model {
   @ManyToOne(() => Brand)
   @Field(() => Brand)
   brand: Brand;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

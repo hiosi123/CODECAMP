@@ -114,12 +114,14 @@ type Query {
   fetchProducts: [Used_car!]!
   fetchDeleted: [Used_car!]!
   fetchProduct(carId: Float!): Used_car!
+  searchUsedCar(carintro: String!): [Int!]!
   fetchUsers: [User!]!
   fetchUser: User!
 }
 
 type Mutation {
   login(email: String!, password: String!, provider: String!): String!
+  logout: String!
   restoreAccessToken: String!
   createBrand(brandName: String!): Brand!
   uploadFile(files: [Upload!]!): [String!]!

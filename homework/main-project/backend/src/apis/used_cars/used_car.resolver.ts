@@ -1,3 +1,4 @@
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateUsed_carInput } from './dto/createUsed_car.input';
 import { UpdateUsed_carInput } from './dto/updateUsed_car.input';

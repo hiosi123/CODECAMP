@@ -1,5 +1,5 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './apis/auth/auth.module';
@@ -19,6 +19,9 @@ import { Used_carModule } from './apis/used_cars/used_car.module';
 import { UserModule } from './apis/user/user.module';
 // import { AppController } from './app.controller';
 // import { AppService } from './app.service';
+import type { RedisClientOptions } from 'redis';
+import * as redisStore from 'cache-manager-redis-store';
+import { SearchModule } from './apis/search/search.module';
 
 @Module({
   imports: [
@@ -35,6 +38,7 @@ import { UserModule } from './apis/user/user.module';
     FuelModule,
     GearModule,
     IamportService,
+    SearchModule,
     UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -51,6 +55,11 @@ import { UserModule } from './apis/user/user.module';
       entities: [__dirname + '/apis/**/*.entity.*'], //각 경로 설정
       synchronize: true,
       logging: true,
+    }),
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore,
+      url: 'redis://my-redis:6379',
+      isGlobal: true,
     }),
   ],
   // controllers: [AppController],
