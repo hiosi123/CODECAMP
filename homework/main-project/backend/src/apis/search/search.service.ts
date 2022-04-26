@@ -18,7 +18,7 @@ export class SearchService {
 
   async elasticSearchAll({ carintro }) {
     const result = await this.elasticsearchService.search({
-      index: 'used_car',
+      index: 'mycar',
       query: {
         match: { carintro: carintro },
       },
@@ -31,7 +31,7 @@ export class SearchService {
       carintro, //
       values,
       {
-        ttl: 100,
+        ttl: 1000,
       },
     );
   }

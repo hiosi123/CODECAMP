@@ -114,7 +114,7 @@ type Query {
   fetchProducts: [Used_car!]!
   fetchDeleted: [Used_car!]!
   fetchProduct(carId: Float!): Used_car!
-  searchUsedCar(carintro: String!): [Int!]!
+  searchUsedCar(carintro: String!): [Used_car!]!
   fetchUsers: [User!]!
   fetchUser: User!
 }
