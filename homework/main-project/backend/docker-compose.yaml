@@ -17,6 +17,8 @@ services:
     environment:
       MYSQL_DATABASE: 'mydocker02'
       MYSQL_ROOT_PASSWORD: 'root'
+    env_file:
+      - ./.env
     ports:
       - 3306:3306
 
