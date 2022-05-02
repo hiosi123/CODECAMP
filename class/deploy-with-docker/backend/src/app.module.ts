@@ -31,11 +31,11 @@ import { FileModule } from './apis/file/file.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '10.13.240.4',
+      host: '10.13.240.6',
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'classdocker',
+      database: 'myserver02',
       entities: [__dirname + '/apis/**/*.entity.*'], //각 경로 설정
       synchronize: true,
       logging: true,
