@@ -31,7 +31,7 @@ import { FileModule } from './apis/file/file.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '10.13.240.6',
+      host: 'mysql.hiosi123.shop',
       port: 3306,
       username: 'root',
       password: 'root',
