@@ -18,7 +18,7 @@ steps:
       - set
       - image
       - deployment/my-database-image1
-      - my-backend02-sha256-1=asia.gcr.io/test1-347705/my-backend02:2.2.6
+      - my-backend02-sha256-1=asia.gcr.io/test1-347705/my-backend02:2.2.7
     env:
       - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
       - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-02-1
