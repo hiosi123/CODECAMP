@@ -12,6 +12,8 @@ import { UserModule } from './apis/users/user.module';
 import { AuthModule } from './apis/auth/auth.module';
 import { PointTransactionModule } from './apis/pointTransaction/pointTransaction.module';
 import { FileModule } from './apis/file/file.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 // import { AppController } from './app.controller';
 // import { AppService } from './app.service';
 
@@ -31,17 +33,17 @@ import { FileModule } from './apis/file/file.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'my-database-02',
+      host: 'mysql.hiosi123.shop',
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'mypod02',
+      database: 'myserver02',
       entities: [__dirname + '/apis/**/*.entity.*'], //각 경로 설정
       synchronize: true,
       logging: true,
     }),
   ],
-  // controllers: [AppController],
-  // providers: [AppService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

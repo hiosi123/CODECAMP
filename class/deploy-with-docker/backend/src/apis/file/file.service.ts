@@ -10,7 +10,7 @@ interface Ifile {
 export class FileService {
   async upload({ files }: Ifile) {
     const storage = new Storage({
-      keyFilename: 'test1-347705-4972e6935e67.json',
+      keyFilename: '/my-secret/gcp-file-storage.json',
       projectId: 'test1-347705',
     }).bucket('codecamp-mainproject-car');
 
